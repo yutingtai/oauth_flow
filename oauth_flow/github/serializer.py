@@ -1,3 +1,5 @@
+from abc import ABC
+
 from rest_framework import serializers
 from dataclasses import dataclass
 
@@ -10,13 +12,9 @@ class Repo:
 
 
 class RepositoryInfoSerializer(serializers.Serializer):
-    def update(self, instance, validated_data):
-        pass
-
-    f = serializers.CharField(source="html_url")
+    html_url = serializers.CharField()
     name = serializers.CharField()
     description = serializers.CharField(allow_null=True)
 
     def create(self, validated_data):
         return Repo(**validated_data)
-
