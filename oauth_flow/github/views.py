@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 import requests
 from django.urls import reverse
+
+from .constants import GITHUB_OAUTH_URL
 from .serializer import RepositoryInfoSerializer
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -8,10 +10,9 @@ import os
 
 # request.session.get will set the default value = None is key doesn't exist.
 def home_page(request):
-    authenticated_url = 'https://github.com/login/oauth/authorize?client_id=89f6bf27704fa92ade50&scope=repo%20user3Astatus'
     if request.session.get('access_token') is None:
         context = {
-            "destination": authenticated_url
+            "destination": GITHUB_OAUTH_URL
         }
         return render(request, 'github/home.html', context=context)
     else:
@@ -21,7 +22,7 @@ def home_page(request):
         return render(request, 'github/home.html', context=context)
 
 
-def access_token_require(request):
+def github_oauth_callback(request):
     load_dotenv(find_dotenv())
     client_secret = os.environ['client_secret']
     exchange_code = request.GET.get('code')
@@ -31,8 +32,16 @@ def access_token_require(request):
         "code": exchange_code
     }
 
-    access_token_response = requests.post('https://github.com/login/oauth/access_token', params=params,
-                                          headers={"Accept": "application/json"}).json()
+    response = requests.post(
+        'https://github.com/login/oauth/access_token',
+        params=params,
+        headers={"Accept": "application/json"}
+    )
+
+    if response.status_code == 200:
+        pass
+
+    access_token_response = response.json()
 
     access_token = access_token_response['access_token']
     request.session['access_token'] = access_token
@@ -48,8 +57,7 @@ def repo_page(request):
     }
     repo_info_response = requests.get(repos_url, headers=header)
     if repo_info_response.status_code == 401:
-        return redirect(
-            'https://github.com/login/oauth/authorize?client_id=89f6bf27704fa92ade50&scope=repo%20user3Astatus')
+        return redirect(GITHUB_OAUTH_URL)
     else:
         repo_info_response = repo_info_response.json()
         serializer = RepositoryInfoSerializer(data=repo_info_response, many=True)

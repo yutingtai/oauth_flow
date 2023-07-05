@@ -1,0 +1,1 @@
+GITHUB_OAUTH_URL = 'https://github.com/login/oauth/authorize?client_id=89f6bf27704fa92ade50&scope=repo%20user3Astatus'
