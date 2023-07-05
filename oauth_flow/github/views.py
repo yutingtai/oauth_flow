@@ -6,8 +6,7 @@ from dotenv import load_dotenv, find_dotenv
 import os
 
 
-# Create your views here.
-
+# request.session.get will set the default value = None is key doesn't exist.
 def home_page(request):
     authenticated_url = 'https://github.com/login/oauth/authorize?client_id=89f6bf27704fa92ade50&scope=repo%20user3Astatus'
     if request.session.get('access_token') is None:
