@@ -59,7 +59,7 @@ def side_effect_401(*args, **kwargs):
 def create_response(code, json_body):
     response = MagicMock()
     response.json = MagicMock(return_value=json_body)
-    response.response_code = code
+    response.status_code = code
     return response
 
 
@@ -84,7 +84,7 @@ class GetAccessTokenTest(TestCase):
 
 
 def repo_page_side_effect_401(*args, **kwargs):
-    create_response(
+    return create_response(
         code=401,
         json_body=None
     )
