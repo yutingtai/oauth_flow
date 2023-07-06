@@ -3,3 +3,5 @@
 .env
 **/__pycache__/
 pyvenv.cfg
+db.sqlite3
+repo.bundle
