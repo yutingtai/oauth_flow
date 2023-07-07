@@ -4,8 +4,7 @@ on:
   push:
     branches: [ "main" ]
 env:
-  SECRET_KEY: ${{ oauth_flow.SECRET_KEY }}
-  client_secret : ${{ oauth_flow.client_secret }}
+
 
 jobs:
   build:
@@ -17,6 +16,12 @@ jobs:
         python-version: ["3.9","3.10"]
 
     steps:
+    - uses: actions/checkout@v2
+    - name: Decode base64 secrets
+      run: echo $SECRETS_FILE_CONTENTS | base64 -d > lib/path/to/secrets.dart
+      env:
+            SECRET_KEY: ${{ secrets.SECRET_KEY }}
+            client_secret : ${{ secrets.client_secret }}
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
