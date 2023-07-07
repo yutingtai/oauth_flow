@@ -3,6 +3,9 @@ name: Django CI
 on:
   push:
     branches: [ "main" ]
+env:
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  client_secret : ${{ secrets.client_secret }}
 
 jobs:
   build:
