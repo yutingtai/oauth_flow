@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "main" ]
 env:
-  SECRET_KEY: ${{ secrets.SECRET_KEY }}
-  client_secret : ${{ secrets.client_secret }}
+  SECRET_KEY: ${{ oauth_flow.SECRET_KEY }}
+  client_secret : ${{ oauth_flow.client_secret }}
 
 jobs:
   build:
